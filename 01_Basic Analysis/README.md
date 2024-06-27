@@ -48,3 +48,19 @@ En este proyecto, configurarás un entorno de desarrollo, prepararás un pequeñ
 - Organiza tu proyecto en un repositorio de Git.
 - Asegúrate de que todos los scripts se puedan ejecutar correctamente.
 - Proporciona un README con instrucciones claras sobre cómo configurar el entorno y ejecutar el proyecto.
+
+## Ejemplo de Estructura de Directorios
+
+basic_data_analysis_project/
+│
+├── data/
+│ ├── raw/
+│ ├── processed/
+│
+├── scripts/
+│ ├── process_data.py
+│ ├── analyze_data.py
+│ └── hadoop_utils.py
+│
+├── README.md
+└── requirements.txt
