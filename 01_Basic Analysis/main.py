@@ -1,4 +1,4 @@
-import pytorch
+import torch
 
-x = torch.empty(1)
+x = torch.rand(5, 3)
 print(x)
