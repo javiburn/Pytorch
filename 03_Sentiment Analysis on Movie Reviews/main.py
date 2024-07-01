@@ -1,37 +1,27 @@
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, lower, regexp_replace, count, round, sum
+import init_spark as sp
+import model.model
+import glob
+import pandas as pd
+import torch
+from torch.utils.data import Dataset, DataLoader
+#import torchvision.transforms as transforms
 
-spark = SparkSession \
-    .builder \
-    .appName("Python Spark Movie Reviws Analysis") \
-    .config("spark.some.config.option", "some-value") \
-    .getOrCreate()
+sp.init_spark()
+test_name = ""
+test_path = "test.csv/*.csv"
+for file in glob.glob(test_path):
+    test_name = file
+test = pd.read_csv(test_name, encoding = "UTF-8")
+train_name = ""
+train_path = "train.csv/*.csv"
+for file in glob.glob(train_path):
+    train_name = file
+train = pd.read_csv(train_name, encoding = "UTF-8")
 
-path = "./movie_reviews.csv"
-df = spark.read.option("delimiter", ",").option("header", True).option("quote", "\"").option("escape", "\"").csv(path)
-#df['review'] = df['review'].str.lower()
-df = df.withColumn('review', lower(df['review']))
-df = df.withColumn('review', regexp_replace(df['review'], r"""[!\"#$%&'()*+,\-.\/:;<=>?@\[\\\]^_`{|}~]"""," "))
-df.show()
+test_tensor = torch.Tensor(test.values)
+train_tensor = torch.Tensor(train.values)
 
-# Split data
-train_df, test_df = df.randomSplit([0.8, 0.2], seed=42)
+print(train_tensor.shape)
 
-train_csv_path = "train.csv"
-test_csv_path = "test.csv"
-targetvar = "sentiment"
-
-trainrows = train_df.count()
-train_df.groupBy(targetvar).agg(count(targetvar).alias('Count')).withColumn("distribution", round((col('Count') / trainrows * 100))).orderBy(targetvar).show()
-
-testrows = test_df.count()
-test_df.groupBy(targetvar).agg(count(targetvar).alias('Count')).withColumn("distribution", round((col('Count') / testrows * 100))).orderBy(targetvar).show()
-print(train_df.count())
-print(test_df.count())
-
-train_df = train_df.repartition(10)
-test_df = test_df.repartition(10)
-train_df.coalesce(1).write.option("header", "true").mode('overwrite').csv(train_csv_path)
-test_df.coalesce(1).write.option("header", "true").mode('overwrite').csv(test_csv_path)
-
-spark.stop()
+# It's time to train our data
+dataloader = DataLoader(train_tensor, batch_size=300, shuffle=True)
