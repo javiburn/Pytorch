@@ -8,3 +8,6 @@ This repository contains two projects designed to help you learn the basics of P
     -  Using Hadoop to store and process a small dataset, and Pytorch to perform a basic analysis.
 - [Project 2: Digit Classification with PyTorch and Apache Hadoop](https://github.com/javiburn/Pytorch/tree/master/02_Digital%20Classification)
     - Building and training a simple neural network model for the classification of digits using the MNIST dataset. Also, it uses Hadoop to handle storage and data processing.
+
+- [Project 2: Digit Classification with PyTorch and Apache Hadoop](https://github.com/javiburn/Pytorch/tree/master/03_Digital%20Classification)
+    - Building a sentiment analysis model using PyTorch and process a dataset of movie reviews with Apache Spark to understand the basics of data preprocessing with Spark and building and training neural networks with PyTorch.
